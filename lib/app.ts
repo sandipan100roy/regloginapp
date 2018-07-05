@@ -41,7 +41,7 @@ class App {
     });
 
     router.post('/', (req: Request, res: Response) => {
-      const data = req.body;
+      //const data = req.body;
             var query = { email: req.body.email, password: req.body.password};
             dbo.collection("userdetails").find(query).toArray(function(err,result) {
                 if (err) throw err;
@@ -50,6 +50,22 @@ class App {
                 else
                   res.send("User Doesn't Exists");
             });
+    });
+
+    router.post('/registeruser', (req: Request, res: Response) => {
+            const data = req.body;
+            var myObj = {
+              name: data.name,
+              email: data.email,
+              password: data.password,
+              phone: data.phone
+            };
+            dbo.collection("userdetails").insertOne(myObj, function(err, result){
+                if (err) throw err;
+                console.log("1 document inserted");
+                res.send("Response Code - "+result);
+            });
+            
     });
 
     this.app.use('/', router)
