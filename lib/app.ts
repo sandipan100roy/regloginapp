@@ -43,7 +43,7 @@ class App {
     });
 
     //Login API
-    router.post('/', (req: Request, res: Response) => {
+    router.post('/loginuser', (req: Request, res: Response) => {
             var query = { email: req.body.email, password: req.body.password};
             var sha,generatedsession;
             dbo.collection("userdetails").find(query).project({email: 1}).toArray(function(err,result) {
