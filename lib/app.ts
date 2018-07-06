@@ -6,6 +6,11 @@ import * as mongoClient from "mongodb";
 
 import * as cryptoClient from "crypto";
 
+//import getusers from "./getusers";
+
+import { Getusers } from './getusers';
+const getusers = new Getusers();
+
 class App {
 
   constructor() {
@@ -21,7 +26,7 @@ class App {
     this.app.use(bodyParser.urlencoded({ extended: false }));
   }
 
-  private routes(): void {
+  public routes(): void {
     const router = express.Router();
 
     // Initialize MongoDB Connection Once
@@ -34,13 +39,13 @@ class App {
 
 
     //Get All Users API
-    router.get('/', (req: Request, res: Response) => {
+    /*router.get('/', (req: Request, res: Response) => {
             var query = {};
             dbo.collection("userdetails").find(query).toArray(function(err, result) {
                 if (err) throw err;
                  res.send(result);
             });
-    });
+    });*/
 
     //Login API
     router.post('/loginuser', (req: Request, res: Response) => {
@@ -103,7 +108,9 @@ class App {
         });
     });
 
-    this.app.use('/', router)
+    this.app.use('/', router);
+    this.app.use('/getalluser', getusers.router);
+    //module.exports = router;
 
   }
 
