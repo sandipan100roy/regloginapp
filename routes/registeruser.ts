@@ -1,6 +1,8 @@
 import { Request, Response, Router} from "express";
 import * as mongoClient from "mongodb";
 
+import * as crypto from "crypto";
+
 export class Registeruser{
 
 	public router: Router;
@@ -23,10 +25,13 @@ export class Registeruser{
 	    //Register API
     	this.router.post('/', (req: Request, res: Response) => {
             const data = req.body;
+
+            var encryptedPass = this.passwordEncrypt(data.password);
+            
             var myObj = {
               name: data.name,
               email: data.email,
-              password: data.password,
+              password: encryptedPass,
               phone: data.phone
             };
             dbo.collection("userdetails").insertOne(myObj, function(err, result){
@@ -37,6 +42,13 @@ export class Registeruser{
             
     	});
 
+	}
+
+	private passwordEncrypt(password : any): any{
+		var myKey = crypto.createCipher('aes-128-cbc','mypassword');
+		var mystr = myKey.update(password,'utf8','hex');
+		mystr += myKey.final('hex');
+		return mystr;
 	}
 
 }
