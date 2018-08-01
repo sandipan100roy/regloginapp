@@ -1,5 +1,6 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
+import * as cors from "cors";
 
 import { Getusers } from './routes/getusers';
 import { Registeruser } from './routes/registeruser';
@@ -28,12 +29,18 @@ class App {
 
   public routes(): void {
     const router = express.Router();
+    this.app.use(cors())
 
     //this.app.use('/', router);
-    this.app.use('/getalluser', getusers.router);
+    this.app.use('/getalluser', this.getsession, getusers.router);
     this.app.use('/registeruser', registeruser.router);
-    this.app.use('/loginuser', loginuser.router);
-    this.app.use('/logout', logoutuser.router);
+    this.app.use('/loginuser', this.getsession, loginuser.router);
+    this.app.use('/logout', this.getsession, logoutuser.router);
+  }
+
+  public getsession(req, res, next){
+    console.log("From getsession function getalluser");
+    next();
   }
 
 }
