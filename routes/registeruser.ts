@@ -49,10 +49,16 @@ export class Registeruser {
                     dbo.collection("userdetails").insertOne(myObj, function(err, result) {
                         if (err) throw err;
                         console.log("1 document inserted!!!");
-                        res.send("Response Code - " + result);
+                        var message ={
+                            responsecode : result
+                        }
+                        res.send(message);
                     });
                 } else {
-                    res.send("User Already Exists");
+                    var message ={
+                        msg : "User Already Exists"
+                    }
+                    res.send(message);
                 }
             });
 
