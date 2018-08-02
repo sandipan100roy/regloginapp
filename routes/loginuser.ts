@@ -28,19 +28,17 @@ export class Loginuser {
             var query = { email: req.body.email};
             var sha,generatedsession;
 
-            dbo.collection("userdetails").find(query).project({email: 1, password: 1}).toArray(function(err,result) {
+            dbo.collection("userdetails").find(query).project({name:1, email: 1, password: 1}).toArray(function(err,result) {
                 if (err) throw err;
 
                 if(result && result.length==1){
 
                   //Decrypt encryptedpassword Starts
-			
                   var matched = false;
                   //var decryptedPassword = this.passwordDecrypt(result[0].password);
                   var myKey = cryptoClient.createDecipher('aes-128-cbc','mypassword');
                   var myStr = myKey.update(result[0].password, 'hex', 'utf8');
                   myStr += myKey.final('utf8');
-			
                   //Decrypt encryptedpassword Ends
 
                   if(myStr == req.body.password)
@@ -68,17 +66,25 @@ export class Loginuser {
 
                       //Add Session Id To Response.
                       result[0].sessionid = generatedsession;
+                      result[0].code = 1;
                       res.json(result)
 
                   }else{
-
-                      res.send("User Doesn't Exists");
+                      var message ={
+                        msg : "User Doesn't Exists",
+                        code:0
+                      }
+                      res.send(message);
 
                   }
                   
                }
                 else{
-                  res.send("User Doesn't Exists");
+                  var message ={
+                        msg : "User Doesn't Exists",
+                        code:0
+                  }
+                  res.send(message);
                 }
             });
    		});
