@@ -24,11 +24,14 @@ export class Logoutuser {
 
 	    //Logout API
 	    this.router.post('/', (req: Request, res: Response ) => {
-	        var deletequery = { userid: req.body.email };
+	        var deletequery = { sessionid: req.body.sessionid };
 	        dbo.collection("usersessiondetails").deleteOne(deletequery, function(err, result){
 	          if (err) throw err;
-	          console.log("Session deleted!!!");
-	          res.send("Response Code - "+result);
+	          var logoutRes ={
+	          		code:result,
+	          		msg:'User logged out!!!'
+	          }
+	          res.send(logoutRes);
 	        });
 	    });
 
