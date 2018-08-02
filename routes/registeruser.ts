@@ -56,7 +56,8 @@ export class Registeruser {
                     });
                 } else {
                     var message ={
-                        msg : "User Already Exists"
+                        msg : "Email Already Exists",
+                        code: 2
                     }
                     res.send(message);
                 }
